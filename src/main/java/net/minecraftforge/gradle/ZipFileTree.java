@@ -41,7 +41,7 @@ import org.gradle.api.internal.file.collections.MinimalFileTree;
 import org.gradle.util.DeprecationLogger;
 import org.gradle.util.GFileUtils;
 
-public class ZipFileTree implements MinimalFileTree
+public abstract class ZipFileTree implements MinimalFileTree
 {
     private final File zipFile;
 

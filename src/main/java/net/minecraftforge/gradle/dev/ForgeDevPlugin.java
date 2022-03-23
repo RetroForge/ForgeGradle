@@ -90,7 +90,7 @@ public class ForgeDevPlugin extends DevBasePlugin
 
         // the master task.
         task = makeTask("buildPackages");
-        task.dependsOn("launch4j", "createChangelog", "packageUniversal", "packageInstaller", "packageUserDev", "packageSrc");
+        task.dependsOn("launch4j", "packageUniversal", "packageInstaller", "packageUserDev", "packageSrc");
         task.setGroup("Forge");
     }
 
@@ -441,16 +441,16 @@ public class ForgeDevPlugin extends DevBasePlugin
             crowdin.setExtract(false);
         }
 
-        ChangelogTask makeChangelog = makeTask("createChangelog", ChangelogTask.class);
-        {
-            makeChangelog.getOutputs().upToDateWhen(Constants.CALL_FALSE);
-            makeChangelog.setServerRoot(delayedString("{JENKINS_SERVER}"));
-            makeChangelog.setJobName(delayedString("{JENKINS_JOB}"));
-            makeChangelog.setAuthName(delayedString("{JENKINS_AUTH_NAME}"));
-            makeChangelog.setAuthPassword(delayedString("{JENKINS_AUTH_PASSWORD}"));
-            makeChangelog.setTargetBuild(delayedString("{BUILD_NUM}"));
-            makeChangelog.setOutput(delayedFile(CHANGELOG));
-        }
+        // ChangelogTask makeChangelog = makeTask("createChangelog", ChangelogTask.class);
+        // {
+            // makeChangelog.getOutputs().upToDateWhen(Constants.CALL_FALSE);
+            // makeChangelog.setServerRoot(delayedString("{JENKINS_SERVER}"));
+            // makeChangelog.setJobName(delayedString("{JENKINS_JOB}"));
+            // makeChangelog.setAuthName(delayedString("{JENKINS_AUTH_NAME}"));
+            // makeChangelog.setAuthPassword(delayedString("{JENKINS_AUTH_PASSWORD}"));
+            // makeChangelog.setTargetBuild(delayedString("{BUILD_NUM}"));
+            // makeChangelog.setOutput(delayedFile(CHANGELOG));
+        // }
 
         VersionJsonTask vjson = makeTask("generateVersionJson", VersionJsonTask.class);
         {
@@ -508,7 +508,7 @@ public class ForgeDevPlugin extends DevBasePlugin
                 }
             });
             uni.setDestinationDir(delayedFile("{BUILD_DIR}/distributions").call());
-            uni.dependsOn("genBinPatches", crowdin, makeChangelog, "createVersionPropertiesFML", vjson);
+            uni.dependsOn("genBinPatches", crowdin, "createVersionPropertiesFML", vjson);
         }
         project.getArtifacts().add("archives", uni);
 
@@ -678,7 +678,7 @@ public class ForgeDevPlugin extends DevBasePlugin
             src.from(delayedFile("{FML_DIR}/gradlew.bat"));
             src.from(delayedFile("{FML_DIR}/gradle/wrapper"), new CopyInto("gradle/wrapper"));
             src.rename(".+?\\.gradle", "build.gradle");
-            src.dependsOn(makeChangelog);
+            //src.dependsOn(makeChangelog);
             src.setExtension("zip");
         }
         project.getArtifacts().add("archives", src);

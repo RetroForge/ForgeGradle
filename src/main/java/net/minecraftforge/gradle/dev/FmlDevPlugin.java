@@ -82,7 +82,7 @@ public class FmlDevPlugin extends DevBasePlugin
 
         // the master task.
         task = makeTask("buildPackages");
-        task.dependsOn("launch4j", "createChangelog", "packageUniversal", "packageInstaller", "packageUserDev", "packageSrc");
+        task.dependsOn("launch4j", "packageUniversal", "packageInstaller", "packageUserDev", "packageSrc");
         task.setGroup("FML");
 
         // clean decompile task
@@ -361,16 +361,16 @@ public class FmlDevPlugin extends DevBasePlugin
             crowdin.setExtract(false);
         }
 
-        ChangelogTask makeChangelog = makeTask("createChangelog", ChangelogTask.class);
-        {
-            makeChangelog.getOutputs().upToDateWhen(Constants.CALL_FALSE);
-            makeChangelog.setServerRoot(delayedString("{JENKINS_SERVER}"));
-            makeChangelog.setJobName(delayedString("{JENKINS_JOB}"));
-            makeChangelog.setAuthName(delayedString("{JENKINS_AUTH_NAME}"));
-            makeChangelog.setAuthPassword(delayedString("{JENKINS_AUTH_PASSWORD}"));
-            makeChangelog.setTargetBuild(delayedString("{BUILD_NUM}"));
-            makeChangelog.setOutput(delayedFile(DevConstants.CHANGELOG));
-        }
+        // ChangelogTask makeChangelog = makeTask("createChangelog", ChangelogTask.class);
+        // {
+            // makeChangelog.getOutputs().upToDateWhen(Constants.CALL_FALSE);
+            // makeChangelog.setServerRoot(delayedString("{JENKINS_SERVER}"));
+            // makeChangelog.setJobName(delayedString("{JENKINS_JOB}"));
+            // makeChangelog.setAuthName(delayedString("{JENKINS_AUTH_NAME}"));
+            // makeChangelog.setAuthPassword(delayedString("{JENKINS_AUTH_PASSWORD}"));
+            // makeChangelog.setTargetBuild(delayedString("{BUILD_NUM}"));
+            // makeChangelog.setOutput(delayedFile(DevConstants.CHANGELOG));
+        // }
 
         final DelayedJar uni = makeTask("packageUniversal", DelayedJar.class);
         {
@@ -399,7 +399,7 @@ public class FmlDevPlugin extends DevBasePlugin
                     return null;
                 }
             });
-            uni.dependsOn("genBinPatches", crowdin, makeChangelog, "createVersionProperties");
+            uni.dependsOn("genBinPatches", crowdin, "createVersionProperties");
         }
         project.getArtifacts().add("archives", uni);
 
@@ -540,7 +540,7 @@ public class FmlDevPlugin extends DevBasePlugin
             src.from(delayedFile("{FML_DIR}/gradlew.bat"));
             src.from(delayedFile("{FML_DIR}/gradle/wrapper"), new CopyInto("gradle/wrapper"));
             src.rename(".+?\\.gradle", "build.gradle");
-            src.dependsOn("createChangelog");
+            //src.dependsOn("createChangelog");
             src.setExtension("zip");
         }
         project.getArtifacts().add("archives", src);

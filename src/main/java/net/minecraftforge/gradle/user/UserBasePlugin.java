@@ -1127,14 +1127,6 @@ public abstract class UserBasePlugin<T extends UserExtension> extends BasePlugin
             t.include(getExtension().getIncludes());
         }
 
-        // use zinc for scala compilation
-        project.getTasks().withType(ScalaCompile.class, new Action() {
-            @Override
-            public void execute(Object arg0)
-            {
-                ((ScalaCompile) arg0).getScalaCompileOptions().setUseAnt(false);
-            }
-        });
     }
 
     /**

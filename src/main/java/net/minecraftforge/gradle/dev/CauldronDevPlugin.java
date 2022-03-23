@@ -87,7 +87,7 @@ public class CauldronDevPlugin extends DevBasePlugin
 //        // the master task.
         task = makeTask("buildPackages");
         //task.dependsOn("launch4j", "createChangelog", "packageUniversal", "packageInstaller", "genJavadocs");
-        task.dependsOn("cleanPackages", "createChangelog", "packageUniversal", "packageInstaller");
+        task.dependsOn("cleanPackages", "packageUniversal", "packageInstaller");
         task.setGroup("Cauldron");
     }
 
@@ -459,16 +459,16 @@ public class CauldronDevPlugin extends DevBasePlugin
     private void createPackageTasks()
     {
 
-        ChangelogTask log = makeTask("createChangelog", ChangelogTask.class);
-        {
-            log.getOutputs().upToDateWhen(Constants.CALL_FALSE);
-            log.setServerRoot(delayedString("{JENKINS_SERVER}"));
-            log.setJobName(delayedString("{JENKINS_JOB}"));
-            log.setAuthName(delayedString("{JENKINS_AUTH_NAME}"));
-            log.setAuthPassword(delayedString("{JENKINS_AUTH_PASSWORD}"));
-            log.setTargetBuild(delayedString("{BUILD_NUM}"));
-            log.setOutput(delayedFile(CHANGELOG));
-        }
+        // ChangelogTask log = makeTask("createChangelog", ChangelogTask.class);
+        // {
+            // log.getOutputs().upToDateWhen(Constants.CALL_FALSE);
+            // log.setServerRoot(delayedString("{JENKINS_SERVER}"));
+            // log.setJobName(delayedString("{JENKINS_JOB}"));
+            // log.setAuthName(delayedString("{JENKINS_AUTH_NAME}"));
+            // log.setAuthPassword(delayedString("{JENKINS_AUTH_PASSWORD}"));
+            // log.setTargetBuild(delayedString("{BUILD_NUM}"));
+            // log.setOutput(delayedFile(CHANGELOG));
+        // }
 
         /*
         VersionJsonTask vjson = makeTask("generateVersionJson", VersionJsonTask.class);
@@ -532,7 +532,7 @@ public class CauldronDevPlugin extends DevBasePlugin
 
             uni.setDestinationDir(delayedFile("{BUILD_DIR}/distributions").call());
             //uni.dependsOn("genBinPatches", "createChangelog", "createVersionPropertiesFML", "generateVersionJson");
-            uni.dependsOn("genBinPatches", "createChangelog", "createVersionPropertiesFML");
+            uni.dependsOn("genBinPatches", "createVersionPropertiesFML");
         }
         project.getArtifacts().add("archives", uni);
 
